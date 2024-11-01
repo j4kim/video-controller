@@ -1,5 +1,6 @@
 import RPi.GPIO as GPIO
 import time
+import subprocess
 
 config = {
     23: "IWITW variante.mp4",
@@ -10,12 +11,19 @@ config = {
 
 GPIO.setmode(GPIO.BCM)
 
-def button_callback(pin):
-    print(config[pin])
+def play_video(pin):
+    subprocess.run(["pkill", "vlc"])
+    path = "/home/jo/samba/trucs/" + config[pin]
+    subprocess.Popen([
+        "vlc",
+        "--fullscreen",
+        "--no-video-title-show",
+        path
+    ])
 
 for pin in config:
     GPIO.setup(pin, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
-    GPIO.add_event_detect(pin, GPIO.RISING, callback=button_callback, bouncetime=200)
+    GPIO.add_event_detect(pin, GPIO.RISING, callback=play_video, bouncetime=200)
 
 try:
     while True:
@@ -26,3 +34,4 @@ except KeyboardInterrupt:
 
 finally:
     GPIO.cleanup()
+    subprocess.run(["pkill", "vlc"])
