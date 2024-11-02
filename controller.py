@@ -1,6 +1,8 @@
 import RPi.GPIO as GPIO
 import time
 import subprocess
+import socket
+import json
 
 config = {
     23: "balle.AVI",
@@ -9,23 +11,37 @@ config = {
     8: "poisson.mp4"
 }
 
+mpv_socket = "/tmp/mpv-socket"
+
+videos_dir = "/home/jo/samba/trucs/"
+
 GPIO.setmode(GPIO.BCM)
 
-def play_video(pin):
-    subprocess.run(["pkill", "mpv"])
-    path = "/home/jo/samba/trucs/" + config[pin]
-    subprocess.Popen([
+def get_path(pin):
+    return videos_dir + config[pin]
+
+def run_mpv():
+    return subprocess.Popen([
         "mpv",
         "--fullscreen",
         "--no-osd-bar",
         "--no-border",
-        "--input-ipc-server=/tmp/mpv-socket",
-        path
+        f"--input-ipc-server={mpv_socket}",
+        get_path(23)
     ])
 
+def send_mpv_command(command):
+    with socket.socket(socket.AF_UNIX, socket.SOCK_STREAM) as sock:
+        sock.connect(mpv_socket)
+        sock.sendall(json.dumps(command).encode("utf-8") + b"\n")
+
+def loadfile(pin):
+    send_mpv_command({"command": ["loadfile", get_path(pin), "replace"] })
 for pin in config:
     GPIO.setup(pin, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
-    GPIO.add_event_detect(pin, GPIO.RISING, callback=play_video, bouncetime=200)
+    GPIO.add_event_detect(pin, GPIO.RISING, callback=loadfile, bouncetime=200)
+
+mpv = run_mpv()
 
 try:
     while True:
@@ -36,4 +52,4 @@ except KeyboardInterrupt:
 
 finally:
     GPIO.cleanup()
-    subprocess.run(["pkill", "mpv"])
+    mpv.terminate()
