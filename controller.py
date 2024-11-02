@@ -3,10 +3,10 @@ import time
 import subprocess
 
 config = {
-    23: "IWITW variante.mp4",
-    24: "Jasmina.AVI",
-    25: "La Quizza.AVI",
-    8: "ouais ouais c'est la vie v2.mov"
+    23: "balle.AVI",
+    24: "papillon.mp4",
+    25: "pipou.mp4",
+    8: "poisson.mp4"
 }
 
 GPIO.setmode(GPIO.BCM)
