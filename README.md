@@ -35,3 +35,7 @@ Restart service:
 Enable/disable service:
 
 	sudo systemctl enable video-controller.service
+
+Get status and logs:
+
+	sudo systemctl status video-controller.service
