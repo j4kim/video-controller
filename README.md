@@ -12,6 +12,8 @@ MPV messages to change the video are handled by a socket.
 
 	pip install -r requirements.txt
 
+	cp config.py.example config.py
+
 ## Run
 
 	python controller.py
