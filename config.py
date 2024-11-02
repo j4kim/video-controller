@@ -5,6 +5,4 @@ videos = {
     8: "poisson.mp4"
 }
 
-mpv_socket = "/tmp/mpv-socket"
-
 videos_dir = "/home/jo/samba/trucs/"

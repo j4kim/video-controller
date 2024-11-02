@@ -6,6 +6,8 @@ import json
 import config
 import os
 
+mpv_socket = os.path.expanduser("~/.mpv-socket")
+
 def get_path(pin):
     return config.videos_dir + config.videos[pin]
 
@@ -15,20 +17,17 @@ def run_mpv():
         "--fullscreen",
         "--no-osd-bar",
         "--no-border",
-        f"--input-ipc-server={config.mpv_socket}",
+        f"--input-ipc-server={mpv_socket}",
         "--idle"
     ])
 
 def send_mpv_command(command):
     with socket.socket(socket.AF_UNIX, socket.SOCK_STREAM) as sock:
-        sock.connect(config.mpv_socket)
+        sock.connect(mpv_socket)
         sock.sendall(json.dumps(command).encode("utf-8") + b"\n")
 
 def loadfile(pin):
     send_mpv_command({"command": ["loadfile", get_path(pin), "replace"] })
-
-if os.path.exists(config.mpv_socket):
-    os.remove(config.mpv_socket)
 
 mpv = run_mpv()
 
