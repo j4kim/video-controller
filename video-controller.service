@@ -8,8 +8,8 @@ Environment=DISPLAY=:0
 Environment=XAUTHORITY=/home/jo/.Xauthority
 Restart=always
 RestartSec=3
-User:jo
-Group:jo
+User=jo
+Group=jo
 WorkingDirectory=/home/jo/video-controller
 StandardOutput=/home/jo/video-controller/out.log
 StandardError=/home/jo/video-controller/err.log
