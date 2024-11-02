@@ -37,9 +37,9 @@ def send_mpv_command(command):
 
 def loadfile(pin):
     send_mpv_command({"command": ["loadfile", get_path(pin), "replace"] })
+
 for pin in config:
     GPIO.setup(pin, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
-    GPIO.add_event_detect(pin, GPIO.RISING, callback=loadfile, bouncetime=200)
 
 mpv = run_mpv()
 
