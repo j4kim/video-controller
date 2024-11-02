@@ -1,10 +1,35 @@
-python3 -m venv venv
+# Video controller
 
-source venv/bin/activate
+A python script to run videos using MPV.
+The played video is changed via buttons wired to GPIO ports on a Raspberry Pi.
+MPV messages to change the video are handled by a socket.
 
-pip install -r requirements.txt
+## Install
 
-python controller.py
+	python3 -m venv venv
 
-sudo mount -t cifs //192.168.1.120/SSD ~/samba -o username=osmc,password=osmc,uid=1000,gid=1000,file_mode=0777,dir_mode=0777
+	source venv/bin/activate
 
+	pip install -r requirements.txt
+
+## Run
+
+	python controller.py
+
+## Run as a service
+
+	sudo nano /etc/systemd/system/video-controller.service
+	
+The service is copied to [video-controller.service](video-controller.service)
+
+Reload after change in the service:
+
+	sudo systemctl daemon-reload
+	
+Restart service:
+
+	sudo systemctl restart video-controller.service
+	
+Enable/disable service:
+
+	sudo systemctl enable video-controller.service

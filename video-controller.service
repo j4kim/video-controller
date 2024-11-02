@@ -1,0 +1,19 @@
+[Unit]
+Description=Video controller
+After=network.target
+
+[Service]
+ExecStart=/home/jo/video-controller/venv/bin/python /home/jo/video-controller/controller.py
+Environment=DISPLAY=:0
+Environment=XAUTHORITY=/home/jo/.Xauthority
+Restart=always
+RestartSec=3
+User:jo
+Group:jo
+WorkingDirectory=/home/jo/video-controller
+StandardOutput=/home/jo/video-controller/out.log
+StandardError=/home/jo/video-controller/err.log
+
+[Install]
+WantedBy=multi-user.target
+
