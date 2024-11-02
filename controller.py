@@ -12,12 +12,14 @@ config = {
 GPIO.setmode(GPIO.BCM)
 
 def play_video(pin):
-    subprocess.run(["pkill", "vlc"])
+    subprocess.run(["pkill", "mpv"])
     path = "/home/jo/samba/trucs/" + config[pin]
     subprocess.Popen([
-        "vlc",
+        "mpv",
         "--fullscreen",
-        "--no-video-title-show",
+        "--no-osd-bar",
+        "--no-border",
+        "--input-ipc-server=/tmp/mpv-socket",
         path
     ])
 
@@ -34,4 +36,4 @@ except KeyboardInterrupt:
 
 finally:
     GPIO.cleanup()
-    subprocess.run(["pkill", "vlc"])
+    subprocess.run(["pkill", "mpv"])
