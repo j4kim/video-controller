@@ -40,6 +40,7 @@ def loadfile(pin):
 
 for pin in config:
     GPIO.setup(pin, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+    GPIO.add_event_detect(pin, GPIO.RISING, callback=loadfile, bouncetime=200)
 
 mpv = run_mpv()
 
