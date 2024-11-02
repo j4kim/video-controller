@@ -27,7 +27,7 @@ def run_mpv():
         "--no-osd-bar",
         "--no-border",
         f"--input-ipc-server={mpv_socket}",
-        get_path(23)
+        "--idle"
     ])
 
 def send_mpv_command(command):
