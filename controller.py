@@ -24,20 +24,22 @@ def run_mpv():
     ])
 
 def send_mpv_command(command):
-    with socket.socket(socket.AF_UNIX, socket.SOCK_STREAM) as sock:
-        sock.connect(mpv_socket)
-        sock.sendall(json.dumps(command).encode("utf-8") + b"\n")
+    sock.sendall(json.dumps(command).encode("utf-8") + b"\n")
 
 def loadfile(pin):
     global reading
     if pin == reading:
         send_mpv_command({"command": ["stop"] })
-        reading = -1
     else:
         send_mpv_command({"command": ["loadfile", get_path(pin), "replace"] })
         reading = pin
 
 mpv = run_mpv()
+
+time.sleep(1)
+
+sock = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
+sock.connect(mpv_socket)
 
 GPIO.setmode(GPIO.BCM)
 
@@ -47,6 +49,11 @@ for pin in config.videos:
 
 try:
     while True:
+        data = sock.recv(1024)
+        if data:
+            message = data.decode("utf-8")
+            if "end-file" in message:
+                reading = -1
         time.sleep(0.1)
 
 except KeyboardInterrupt:
@@ -55,3 +62,4 @@ except KeyboardInterrupt:
 finally:
     GPIO.cleanup()
     mpv.terminate()
+    sock.close()
