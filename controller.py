@@ -8,6 +8,8 @@ import os
 
 mpv_socket = os.path.expanduser("~/.mpv-socket")
 
+reading = -1
+
 def get_path(pin):
     return config.videos_dir + config.videos[pin]
 
@@ -27,7 +29,13 @@ def send_mpv_command(command):
         sock.sendall(json.dumps(command).encode("utf-8") + b"\n")
 
 def loadfile(pin):
-    send_mpv_command({"command": ["loadfile", get_path(pin), "replace"] })
+    global reading
+    if pin == reading:
+        send_mpv_command({"command": ["stop"] })
+        reading = -1
+    else:
+        send_mpv_command({"command": ["loadfile", get_path(pin), "replace"] })
+        reading = pin
 
 mpv = run_mpv()
 
