@@ -1,8 +1,10 @@
 videos = {
-    23: "balle.AVI",
-    24: "papillon.mp4",
-    25: "pipou.mp4",
-    8: "poisson.mp4"
+    3: "balle.AVI",
+    4: "stephanie.AVI",
+    17: "pipou.mp4",
+    27: "vache.mp4",
+    22: "papillon.mp4",
+    10: "ouais.mov"
 }
 
 videos_dir = "/home/jo/samba/trucs/"
