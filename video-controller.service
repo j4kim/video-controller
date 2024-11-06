@@ -1,6 +1,6 @@
 [Unit]
 Description=Video controller
-After=network.target
+After=local-fs.target
 
 [Service]
 ExecStart=/home/jo/video-controller/venv/bin/python /home/jo/video-controller/controller.py
