@@ -37,10 +37,21 @@ def loadfile(pin):
 
 mpv = run_mpv()
 
-time.sleep(1)
-
 sock = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
-sock.connect(mpv_socket)
+
+tries = 0
+
+while True:
+    time.sleep(0.4)
+    tries += 1
+    try:
+        sock.connect(mpv_socket)
+        print("connected")
+        break
+    except ConnectionRefusedError:
+        if tries > 10:
+            print("failed connecting to socket")
+            break
 
 GPIO.setmode(GPIO.BCM)
 
