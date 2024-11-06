@@ -24,6 +24,7 @@ def run_mpv():
     ])
 
 def send_mpv_command(command):
+    print("> send", command)
     sock.sendall(json.dumps(command).encode("utf-8") + b"\n")
 
 def loadfile(pin):
@@ -52,7 +53,8 @@ try:
         data = sock.recv(1024)
         if data:
             message = data.decode("utf-8")
-            if "end-file" in message:
+            print("< received", message)
+            if '{"event":"idle"}' in message:
                 reading = -1
         time.sleep(0.1)
 
