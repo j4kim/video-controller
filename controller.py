@@ -16,7 +16,7 @@ def get_path(pin):
 def run_mpv():
     return subprocess.Popen([
         "mpv",
-        "--fullscreen",
+        #"--fullscreen",
         "--no-osd-bar",
         "--no-border",
         f"--input-ipc-server={mpv_socket}",
@@ -27,13 +27,27 @@ def send_mpv_command(command):
     print("> send", command)
     sock.sendall(json.dumps(command).encode("utf-8") + b"\n")
 
+def show_bg():
+    global reading
+    bg = config.videos_dir + "FOND.mp4"
+    send_mpv_command({"command": ["loadfile", bg, "replace"] })
+    send_mpv_command({"command": ["set_property", "loop", "inf"] })
+    reading = -1
+    print("-- reading --", reading)
+
+def read(pin):
+    global reading
+    send_mpv_command({"command": ["loadfile", get_path(pin), "replace"] })
+    send_mpv_command({"command": ["set_property", "loop", "no"] })
+    reading = pin
+    print("-- reading --", reading)
+
 def loadfile(pin):
     global reading
     if pin == reading:
-        send_mpv_command({"command": ["stop"] })
+        show_bg()
     else:
-        send_mpv_command({"command": ["loadfile", get_path(pin), "replace"] })
-        reading = pin
+        read(pin)
 
 mpv = run_mpv()
 
@@ -47,6 +61,7 @@ while True:
     try:
         sock.connect(mpv_socket)
         print("connected")
+        show_bg()
         break
     except ConnectionRefusedError:
         if tries > 10:
@@ -65,8 +80,8 @@ try:
         if data:
             message = data.decode("utf-8")
             print("< received", message)
-            if '{"event":"idle"}' in message:
-                reading = -1
+            if '"event":"end-file","reason":"eof"' in message:
+                show_bg()
         time.sleep(0.1)
 
 except KeyboardInterrupt:
