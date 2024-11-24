@@ -39,3 +39,11 @@ Enable/disable service:
 Get status and logs:
 
 	sudo systemctl status video-controller.service
+
+## Raspberry setup
+
+Hide cursor using this hack: https://forums.raspberrypi.com/viewtopic.php?t=358285#p2149656
+
+Hide taskbar: https://forums.raspberrypi.com/viewtopic.php?t=358654
+
+To open terminal: <kbd>Ctrl</kbd> + <kbd>T</kbd>
