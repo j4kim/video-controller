@@ -1,0 +1,11 @@
+[Unit]
+Description=Ensure User Autologin
+After=getty@tty1.service systemd-logind.service
+
+[Service]
+Type=oneshot
+ExecStart=/bin/bash -c "sleep 5; loginctl unlock-session $(loginctl list-sessions | grep 'jo' | awk '{print $1}')"
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target
