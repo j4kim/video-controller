@@ -46,4 +46,4 @@ Hide cursor using this hack: https://forums.raspberrypi.com/viewtopic.php?t=3582
 
 Hide taskbar: https://forums.raspberrypi.com/viewtopic.php?t=358654
 
-To open terminal: <kbd>Ctrl</kbd> + <kbd>T</kbd>
+To open terminal: <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>T</kbd>
