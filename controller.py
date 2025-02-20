@@ -10,8 +10,11 @@ mpv_socket = os.path.expanduser("~/.mpv-socket")
 
 reading = -1
 
+def video_path(filename):
+    return config.videos_dir + filename
+
 def get_path(pin):
-    return config.videos_dir + config.videos[pin]
+    return video_path(config.videos[pin])
 
 def run_mpv():
     return subprocess.Popen([
@@ -27,12 +30,15 @@ def send_mpv_command(command):
     print("> send", command)
     sock.sendall(json.dumps(command).encode("utf-8") + b"\n")
 
+def read(path):
+    send_mpv_command({"command": ["loadfile", path, "replace"] })
+
 def loadfile(pin):
     global reading
     if pin == reading:
         send_mpv_command({"command": ["stop"] })
     else:
-        send_mpv_command({"command": ["loadfile", get_path(pin), "replace"] })
+        read(get_path(pin))
         reading = pin
 
 mpv = run_mpv()
@@ -47,6 +53,7 @@ while True:
     try:
         sock.connect(mpv_socket)
         print("connected")
+        read(video_path("ready.png"))
         break
     except ConnectionRefusedError:
         if tries > 10:
